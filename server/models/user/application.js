@@ -33,7 +33,8 @@ const applicationForm = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-    }
+    },
+    userId:mongoose.Types.ObjectId
 })
 
 module.exports = mongoose.model('applications', applicationForm)

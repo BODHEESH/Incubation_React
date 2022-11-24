@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react'
 import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
 import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { UserContext } from '../../../src/context/userContext';
 
 
 function Login() {
@@ -26,6 +27,8 @@ function Login() {
         password: ''
     })
 
+    const {userDetails,setUserDetails} = useContext(UserContext)
+
     const handleChange = (e)=>{
         const { name, value } = e.target
         setLogin({
@@ -42,7 +45,7 @@ function Login() {
                 password: true,
                 msg: 'Email is required'
             })
-        }else if( login.password === '' ){
+        }else if( login.password === ' ' ){
             setLogErr({
                 email: true,
                 password: false,
@@ -70,7 +73,16 @@ function Login() {
                             password: true,
                             msg: ''
                         })
-                        Navigate('/')
+                        console.log(response.data.userDatas,"logging user detailsssssssssssssssss");
+                        const datasUser=response.data.userDatas
+                        JSON.stringify(datasUser)
+                        setUserDetails(datasUser)
+
+                        console.log(datasUser,"22222222222222222222222222222222222222");
+
+
+
+                        Navigate('/userhome')
                         console.log(response.data);
                         
                     } else Navigate('/login')
@@ -103,7 +115,7 @@ function Login() {
                                         <p className='font-normal text-xs m-0  mb-3 text-left text-red-600'>{logErr.email ? '' : logErr.msg}</p>
                                         <div className='bg-gray-100 p-2 flex items-center'>
                                             <LockClosedIcon className='text-gray-400 m-2 h-6 w-6' />
-                                            <input type="password" name="password" value={login.password} onChange={handleChange} id="password" placeholder='Password' className='bg-gray-100 outline-none text-sm flex-1' />
+                                            <input type="password" name="password" value={login.password} onChange={handleChange} id="password"  placeholder='Password' className='bg-gray-100 outline-none text-sm flex-1' />
                                         </div>
                                         <p className='font-normal text-xs m-0   mb-5 text-left text-red-600'>{logErr.password ? '' : logErr.msg}</p>
                                         <button className='border-2 text-blue-500 border-blue-500 rounded-full px-12 py-2 inline-block font-semibold hover:bg-blue-500 hover:text-white'>Login</button>

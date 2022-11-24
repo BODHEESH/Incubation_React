@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 
 function Navbar() {
   return (
-    <div className='bg-[#light] col-span-5 border-r border-gray-200 min-h-[90vh] w-[80px] xl:w-[250px] lg:col-span-2 pt-8 flex flex-col items-start justify-between'>
+    <div className='bg-[#1e90ff] col-span-5 border-r border-gray-200 min-h-[90vh] w-[80px] xl:w-[250px] lg:col-span-2 pt-8 flex flex-col items-start justify-between'>
       <div className=' space-y-8 w-full'>
         {
           navLinks.map((link) => <NavItem link={link} key={link.id} />)

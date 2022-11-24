@@ -97,11 +97,12 @@ router.get("/home", async (req, res) => {
         res.json(error);
       });
   } catch (error) {
-    console.log(error);
+    console.log(error);  
   }
 });
 
 router.post("/approve/:id", async (req, res) => {
+  console.log(req.params.id ,"____________________________________________");
   try {
     applicationForm
       .findByIdAndUpdate(

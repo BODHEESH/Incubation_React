@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useReducer } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function Home() {
     const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
@@ -38,6 +39,15 @@ function Home() {
         axios.get(`http://localhost:4000/admin/slotBooking?slotId=${selected.index}&companyId=${selected.id}`).then((response => {
             forceUpdate()
             setShowModal(false)
+
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'slot booked successfully',
+                showConfirmButton: false,
+                timer: 1500
+              })
+
         })).catch(error => console.log(error))
         
     }
@@ -69,7 +79,7 @@ function Home() {
                                 {/*header*/}
                                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                                     <h3 className="text-3xl font-semibold">
-                                        Modal Title
+                                        Available slots
                                     </h3>
                                     <button
                                         className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"

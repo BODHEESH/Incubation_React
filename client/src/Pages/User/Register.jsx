@@ -22,10 +22,7 @@ function Register() {
 
   const handleChange = (e)=>{
     const {name, value} = e.target
-    setRegister({
-      ...register,
-      [name] : value
-    })
+  setRegister({...register,[name] : value})
   }
   
   const registerForm = (e)=>{

@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useReducer } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import {confirmAlert} from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import Swal from 'sweetalert2'
+
 
 function Home() {
     const Navigate = useNavigate();
@@ -35,18 +39,134 @@ function Home() {
             }
         })
     }
-    const approveForm = (id) => {
-        axios.post("http://localhost:4000/admin/approve/" + id ).then((result =>{
-            console.log(result.status );
-            if (result.status === 200) forceUpdate()
+    // const approveForm = (id) => {
+    //     axios.post("http://localhost:4000/admin/approve/" + id ).then((result =>{
+    //         console.log(result.status );
+    //         if (result.status === 200) forceUpdate()
             
-        }))
+    //     }))
+    // }
+
+    const approveForm = (id) => {
+        confirmAlert({
+            title: 'Confirm your submit',
+            message: 'Are you sure to Approve.',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => {
+                    axios.post("http://localhost:4000/admin/approve/" + id).then((response) => {
+                        console.log(response, 'approve');
+                        if (response.status == 200) {
+                            console.log(response.data, 'heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+                            forceUpdate(!reducerValue)
+                            // alert('Form Approved Sucessfully')
+                            // setErrorMessage('Form Approved')
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Form Approved Sucessfully',
+                                showConfirmButton: false,
+                                timer: 1500
+                              })
+            
+                        } else {
+                            console.log(' error somthing went wrong');
+                            // alert('Something Went Wrong')
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Something Went Wrong',
+                                showConfirmButton: false,
+                                timer: 1500
+                              })
+                          
+                        }
+                    }).catch((error) => {
+                        console.log(error.message);
+                        // alert(error.message)
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: error.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                          })
+                        
+                    })
+                }
+              },
+              {
+                label: 'No',
+                // onClick: () => alert('Click No')
+              }
+            ]
+          });
+
+       
     }
+
+
+    // const rejectForm = (id) => {
+    //     axios.post("http://localhost:4000/admin/reject/"+ id).then((result => {
+    //         console.log(result.status);
+    //         if (result.status === 200) forceUpdate()
+    //     }))
+    // }
+
     const rejectForm = (id) => {
-        axios.post("http://localhost:4000/admin/reject/"+ id).then((result => {
-            console.log(result.status);
-            if (result.status === 200) forceUpdate()
-        }))
+        confirmAlert({
+            title: 'Confirm your submit',
+            message: 'Are you sure to Reject.',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => {
+                    axios.post("http://localhost:4000/admin/reject/" + id).then((response) => {
+                        console.log(response, 'reject');
+                        if (response.status === 200)  {
+                            console.log(response.data, 'rejjjjjjjjjjjjjj');
+                            forceUpdate(!reducerValue)
+                            // alert('Form Rejected Sucessfully')
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Form Rejected Sucessfully',
+                                showConfirmButton: false,
+                                timer: 1500
+                              })
+                        } else {
+                            console.log('rejected not completed ');
+                            // alert('Something Went Wrong')
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: 'Something Went Wrong',
+                                showConfirmButton: false,
+                                timer: 1500
+                              })
+                        }
+                    }).catch((error) => {
+                        console.log(error.message, 'rrrrrrrrrrrr');
+                        // alert(error.message)
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: error.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                          })
+                    })
+                }
+              },
+              {
+                label: 'No',
+                // onClick: () => alert('Click No')
+              }
+            ]
+          });
+
+       
     }
 
     return (

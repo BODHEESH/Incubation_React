@@ -4,6 +4,8 @@ const registerForm = require('../models/user/register')
 const applicationForm = require('../models/user/application')
 const bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken');
+const mongoose= require("mongoose")
+
 
 const multer = require('multer');
 
@@ -54,7 +56,7 @@ router.post('/login', async (req, res) => {
 
         registerForm.findOne({ email: email}).then(response => {
             var mailStatus = true;
-            var passwordStatus = true;
+            var passwordStatus = true; 
             if (!response){
                 mailStatus = false;
                 return res.status(200).json({ auth: false, mailStatus });
@@ -73,8 +75,10 @@ router.post('/login', async (req, res) => {
                         name: response.name
                     }
 
+                    console.log(resp,"1111111111111111111111111111");
+
                     let token = jwt.sign(resp, process.env.JWT_SECRET, {expiresIn: 300});
-                    res.status(200).json({ auth: true, token: token, passwordStatus  })
+                    res.status(200).json({ auth: true, token: token, passwordStatus,userDatas: resp  })
 
                 }
             })
@@ -85,9 +89,11 @@ router.post('/login', async (req, res) => {
         console.log(error);
     }
 })
-
+   
 router.post('/application', upload.single('image'), (req, res) => {
-    console.log(req.body);
+    console.log(req.query.userId,"queryyyyyyyyyyyyy");
+
+    console.log(req.body,"33333333333333333333333333333333333333333333");
     try{
         const application = new applicationForm({
             name: req.body.name,
@@ -98,6 +104,7 @@ router.post('/application', upload.single('image'), (req, res) => {
             image: req.file.filename,
             Incubation: req.body.Incubation,
             status: "pending",
+            userId:mongoose.Types.ObjectId(req.query.userId)
         })
 
         application.save().then(data => {
@@ -108,6 +115,19 @@ router.post('/application', upload.single('image'), (req, res) => {
         })
     } catch (error) {
         console.log(error);
+    }
+
+})
+
+router.post("/check-application",async(req,res)=>{
+    let{userId}=req.body
+    console.log(userId,"-------------------------------");
+    let pending = await applicationForm.findOne({userId,status:"pending"})
+    console.log(pending,"pendingggggggggggggggggggggggggggggggg");
+    if (pending) {
+        res.json({status:'found'})
+    }else{
+        res.json({status:'error'})
     }
 
 })
